@@ -33,10 +33,13 @@ const {width, height} = Dimensions.get("window");
 
 export const COLORS = Object.freeze({
     white: "#fff",
+    white1: "#FAFAFA",
     black: "#000000",
 
     green: "#458116",
-    red: "#B51E1E",
+    red1: "#B51E1E",
+    red2: "#8D3636",
+
     pink: "#FFCB9B",
     gray: "#A5A5A5",
     lightGray: "#919191",
