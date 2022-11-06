@@ -1,100 +1,225 @@
 import React, {useState} from 'react';
-import {KeyboardAvoidingView, Pressable, SafeAreaView, Text, View, StyleSheet} from "react-native";
+import {
+    Text,
+    View,
+    SafeAreaView,
+    KeyboardAvoidingView,
+    Pressable,
+    TextInput,
+    StyleSheet,
+    Modal,
+    ScrollView
+} from "react-native";
+import {Input} from '@rneui/base';
+import {Button} from "../../components/inputLabel/buttonAuth";
 import {useNavigation} from "@react-navigation/native";
-import {Input} from "@rneui/base";
+import {Formik, Field, Form, ErrorMessage, FormikProps} from "formik";
+import * as Yup from "yup";
 import {COLORS, SIZES} from "../../constants/themes";
-import { AntDesign } from '@expo/vector-icons';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import {ICONS} from "../../constants/icons";
+import {Ionicons} from '@expo/vector-icons';
+import {AntDesign} from '@expo/vector-icons';
+import CustomInput from "../../components/inputLabel/inputAuth";
+import TextInputMask from 'react-native-text-input-mask';
 
-import AuthService from "../../api/auth.service"
-// import InputAuth from "../../components/inputLabel/inputAuth";
 
-const RegisterScreen: React.FC = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [password, setPassword] = useState('');
+const RegisterScreen: React.FC<{}> = () => {
+    const [passView, SetPassView] = useState(true);
     const navigation = useNavigation();
+
+    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+    const mask = '+7 ([000]) [000]-[0000]';
 
     const validationSchema = () => {
         return Yup.object().shape({
-            fullname: Yup.string().required('Fullname is required'),
-            username: Yup.string()
-                .required('Username is required')
-                .min(6, 'Username must be at least 6 characters')
-                .max(20, 'Username must not exceed 20 characters'),
+            name: Yup.string()
+                .required('Обязательное поле'),
+            phone: Yup.string()
+                .required('Обязательное поле'),
             email: Yup.string()
-                .required('Email is required')
-                .email('Email is invalid'),
+                .required('Обязательное поле')
+                .email('Некорректный ввод почты'),
             password: Yup.string()
-                .required('Password is required')
-                .min(6, 'Password must be at least 6 characters')
-                .max(40, 'Password must not exceed 40 characters'),
-            confirmPassword: Yup.string()
-                .required('Confirm Password is required')
-                .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
-            acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
+                .required('Обязательное поле')
+                .min(4, 'Пароль должен содеражть не менее 4 символовы')
+                .max(40, 'Пароль не должен превышать 40 символов'),
         });
+    };
+
+    const handleLogin = (formValue: Values) => {
+        console.log(formValue)
     }
 
-    const handleSubmit = (data) => {
-        console.log(JSON.stringify(data, null, 2));
+    const initialValues = {
+        name: "",
+        phone: "",
+        email: "",
+        password: "",
+    };
+
+    interface Values {
+        name: string,
+        phone: string,
+        email: string;
+        password: string;
     }
 
 
+    // @ts-ignore
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: COLORS.black, padding: 10, alignItems: 'center'}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: COLORS.black}}>
             <KeyboardAvoidingView>
-                <Pressable onPress={()=> navigation.navigate('Register')}>
-                    <AntDesign name="arrowleft" size={24} color={COLORS.white} />
+                <Pressable onPress={() => navigation.navigate('Login')}
+                           style={{
+                               display: 'flex',
+                               justifyContent: 'center',
+                               height: 60,
+                               alignItems: 'center',
+                           }}>
+                    <AntDesign name="arrowleft" size={25} color={COLORS.white} style={{width: SIZES.width - 50}}/>
                 </Pressable>
-                <Text style={{textAlign: 'center', justifyContent: 'space-between', color: 'white'}}>
+                <Text style={{
+                    position: 'absolute',
+                    textAlign: 'center',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    left: 0,
+                    right: 0,
+                    color: 'white',
+                    marginTop: 15,
+                    height: 50,
+                    zIndex: -1
+                }}>
                     РЕГИСТРАЦИЯ
                 </Text>
 
-                {/*<View style={{width: 350, marginTop: 45}}>*/}
-                {/*    <View>*/}
-                {/*        <Text style={s.label}>Имя</Text>*/}
-                {/*        /!*<InputAuth value={name}*!/*/}
-                {/*        /!*           onChangeText={(text => setName(text))}*!/*/}
-                {/*        /!*           placeholderTextColor={'white'}*!/*/}
-                {/*        /!*           inputContainerStyle={{borderBottomWidth: 0}}*!/*/}
-                {/*        /!*           style={s.input}/>*!/*/}
-                {/*    </View>*/}
+                <View style={styles.loginContainer}>
 
-                {/*    /!*<InputAuth label={'LastName'}/>*!/*/}
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={handleLogin}
+                        validationSchema={validationSchema()}
+                    >
+                        {({
+                              handleChange,
+                              handleBlur,
+                              handleSubmit,
+                              values,
+                              errors,
+                              touched,
+                              resetForm
+                          }) => (
+                            <>
+                                <View style={styles.labelInput}>
+                                    <Text style={styles.textLabel}>Имя</Text>
+                                    <TextInput
+                                        name="name"
+                                        style={styles.textInput}
+                                        onChangeText={handleChange('name')}
+                                        onBlur={handleBlur('name')}
+                                        value={values.name}
+                                        keyboardType="text"
+                                    />
+                                    {(errors.name && touched.name) &&
+                                        <View>
+                                            <Text style={{fontSize: 10, color: COLORS.red1}}>{errors.name}</Text>
+                                        </View>
+                                    }
+                                </View>
+
+                                <View style={styles.labelInput}>
+                                    <Text style={styles.textLabel}>Телефон</Text>
+                                    <TextInput
+                                        name="phone"
+                                        style={styles.textInput}
+                                        onChangeText={handleChange('phone')}
+                                        onBlur={handleBlur('phone')}
+                                        value={values.phone}
+                                        keyboardType="phone"
+                                    />
+                                    {(errors.phone && touched.phone) &&
+                                        <View>
+                                            <Text style={{fontSize: 10, color: COLORS.red1}}>{errors.phone}</Text>
+                                        </View>
+                                    }
+                                </View>
+
+                                <View style={styles.labelInput}>
+                                    <Text style={styles.textLabel}>Почта</Text>
+                                    <TextInput
+                                        name="email"
+                                        style={styles.textInput}
+                                        onChangeText={handleChange('email')}
+                                        onBlur={handleBlur('email')}
+                                        value={values.email}
+                                        keyboardType="email-address"
+                                    />
+                                    {(errors.email && touched.email) &&
+                                        <View>
+                                            <Text style={{fontSize: 10, color: COLORS.red1}}>{errors.email}</Text>
+                                        </View>
+                                    }
+                                </View>
+
+                                <View style={styles.labelInput}>
+                                    <Text style={styles.textLabel}>Пароль</Text>
+                                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                                        <TextInput
+                                            name="password"
+                                            style={[styles.textInput, {width: SIZES.width - 80}]}
+                                            onChangeText={handleChange('password')}
+                                            onBlur={handleBlur('password')}
+                                            value={values.password}
+                                            secureTextEntry={passView}
+                                        />
+
+                                        <Pressable onPress={() => SetPassView(!passView)}
+                                                   style={{borderBottomWidth: 1, borderBottomColor: '#494949'}}>
+                                            {passView ? <Ionicons name="md-eye-off-outline" size={24} color="white"/> :
+                                                <Ionicons name="md-eye-outline" size={24} color="white"/>}
+                                        </Pressable>
+
+                                    </View>
+                                    {(errors.password && touched.password) &&
+                                        <View>
+                                            <Text style={{fontSize: 10, color: COLORS.red1}}>{errors.password}</Text>
+                                        </View>
+                                    }
+                                </View>
 
 
-                {/*    /!*<InputAuth placeholder={'email'}*!/*/}
-                {/*    /!*           value={email}*!/*/}
-                {/*    /!*           onChangeText={(text => setEmail(text))}*!/*/}
-                {/*    /!*           placeholderTextColor={'white'}*!/*/}
-                {/*    /!*           inputContainerStyle={{borderBottomWidth: 0}}*!/*/}
-                {/*    /!*           style={s.input}/>*!/*/}
+                                <Button onPress={handleSubmit} title="Войти"
+                                        styleBtn={(errors.email || errors.password || errors.name || errors.phone) ? {
+                                            backgroundColor: COLORS.red2,
+                                            width: SIZES.width - 50,
+                                            marginTop: 10,
+                                            height: 50
+                                        } : {
+                                            backgroundColor: COLORS.red1,
+                                            width: SIZES.width - 50,
+                                            marginTop: 10,
+                                            height: 50
+                                        }}/>
+                            </>
+                        )}
+                    </Formik>
 
-                {/*    /!*<InputAuth placeholder={'phone'}*!/*/}
-                {/*    /!*           value={phone}*!/*/}
-                {/*    /!*           onChangeText={(text => setPhone(text))}*!/*/}
-                {/*    /!*           placeholderTextColor={'white'}*!/*/}
-                {/*    /!*           inputContainerStyle={{borderBottomWidth: 0}}*!/*/}
-                {/*    /!*           style={s.input}/>*!/*/}
+                    <View>
+                        <View style={styles.line}/>
+                        <Text style={styles.text}>или зарегистрируйтесь с помощью</Text>
+                    </View>
+                    <Button onPress={() => console.log('Log in with Google')}
+                            styleBtn={{backgroundColor: '#FAFAFA', width: SIZES.width - 50, height: 50}}
+                            styleText={{color: 'black'}}
+                            iconName={ICONS.google}
+                            title="Google"/>
 
-                {/*    /!*<InputAuth placeholder={'password'}*!/*/}
-                {/*    /!*           value={password}*!/*/}
-                {/*    /!*           onChangeText={(text => setPassword(text))}*!/*/}
-                {/*    /!*           secureTextEntry={true}*!/*/}
-                {/*    /!*           placeholderTextColor={'white'}*!/*/}
-                {/*    /!*           inputContainerStyle={{borderBottomWidth: 0}}*!/*/}
-                {/*    /!*           style={s.input}/>*!/*/}
-                {/*</View>*/}
+                </View>
+                <View style={styles.circle1}/>
+                <View style={styles.circle2}/>
 
-                <Pressable style={password.length > 4 ? s.activeBtn : s.diactiveBtn}>
-                    <Text style={s.register} onPress={()=> AuthService.register(name,  email, phone,  password)}>
-                        Register
-                    </Text>
-                </Pressable>
             </KeyboardAvoidingView>
+
         </SafeAreaView>
     );
 };
@@ -103,46 +228,70 @@ export default RegisterScreen;
 
 
 // @ts-ignore
-const s = StyleSheet.create({
-    label:{
-        color: COLORS.white
-    },
-    input: {
-        width: 350,
-        padding: 15,
-        borderRadius: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: 'white',
-        color: 'white'
-    },
-
-    diactiveBtn: {
-        width: 300,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+const styles = StyleSheet.create({
+    loginContainer: {
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: COLORS.white,
-        borderWidth: 2,
-        padding: 14
+        height: SIZES.height - 100,
     },
-
-    activeBtn: {
-        width: 300,
-        backgroundColor: 'red',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        justifyContent: 'center',
+    labelInput: {
+        display: 'flex',
         alignItems: 'center',
-        borderColor: 'white',
-        borderWidth: 2,
-        padding: 14
-    },
+        width: SIZES.width,
+        marginTop: 10,
+        marginBottom: 20,
 
-    register: {
-        textAlign: 'center',
-        fontSize: 19,
+    },
+    textLabel: {
+        color: 'white',
+        marginBottom: 10,
         fontWeight: '700',
-        color: 'white'
+        width: SIZES.width - 50
     },
-});
+    text: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 15,
+        // fontWeight: '400',
+        marginTop: 20,
+        marginBottom: 20,
+        paddingHorizontal: 5,
+        // backgroundColor: 'black'
+    },
+    textInput: {
+        width: SIZES.width - 50,
+        borderBottomWidth: 1,
+        borderBottomColor: '#494949',
+        color: 'white',
+        fontWeight: '400'
+    },
+    line: {
+        alignSelf: 'center',
+        position: 'absolute',
+        // borderBottomColor: 'white',
+        // borderBottomWidth: 1,
+        height: '50%',
+        width: '87%'
+    },
+    circle1: {
+        width: 400,
+        height: 400,
+        position: 'absolute',
+        top: SIZES.height - 400,
+        left: SIZES.width - 230,
+        backgroundColor: 'rgba(157, 157, 157, 0.04)',
+        borderRadius: 1000,
+        zIndex: -1,
+    },
+    circle2: {
+        width: 400,
+        height: 400,
+        position: 'absolute',
+        top: SIZES.height - 300,
+        left: -150,
+        backgroundColor: 'rgba(157, 157, 157, 0.03)',
+        borderRadius: 1000,
+        zIndex: -1,
+    }
+})
