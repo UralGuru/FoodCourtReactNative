@@ -47,7 +47,8 @@ const RegisterScreen: React.FC<{}> = () => {
     };
 
     const handleLogin = (formValue: Values) => {
-        console.log(formValue)
+        console.log(formValue);
+        navigation.navigate('Home');
     }
 
     const initialValues = {

@@ -4,7 +4,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from "./screens/AuthScreens/LoginScreen";
 import RegisterScreen from "./screens/AuthScreens/RegisterScreen";
-import ProfileScreen from "./screens/ProfileScreen"
+import HomeScreen from "./screens/HomeScreen"
 
 
 const StackNavigator: React.FC = () => {
@@ -15,7 +15,7 @@ const StackNavigator: React.FC = () => {
             <Stack.Navigator>
                 <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
-                <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
