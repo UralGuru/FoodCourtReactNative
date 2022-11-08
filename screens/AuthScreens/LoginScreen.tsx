@@ -10,6 +10,7 @@ import {ICONS} from "../../constants/icons";
 import {Ionicons} from '@expo/vector-icons';
 import {AntDesign} from '@expo/vector-icons';
 import CustomInput from "../../components/inputLabel/inputAuth";
+import AuthService from "../../api/auth.service"
 
 
 const LoginScreen: React.FC<{}> = () => {
@@ -29,7 +30,8 @@ const LoginScreen: React.FC<{}> = () => {
     };
 
     const handleLogin = (formValue: Values) => {
-        console.log(formValue)
+        // console.log(formValue);
+        AuthService.login(formValue);
     }
 
     const initialValues = {

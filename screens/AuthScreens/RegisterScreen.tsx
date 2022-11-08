@@ -21,6 +21,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {AntDesign} from '@expo/vector-icons';
 import CustomInput from "../../components/inputLabel/inputAuth";
 import TextInputMask from 'react-native-text-input-mask';
+import AuthService from "../../api/auth.service"
 
 
 const RegisterScreen: React.FC<{}> = () => {
@@ -47,8 +48,9 @@ const RegisterScreen: React.FC<{}> = () => {
     };
 
     const handleLogin = (formValue: Values) => {
-        console.log(formValue);
-        navigation.navigate('Home');
+        // console.log(formValue);
+        AuthService.register(formValue);
+        // navigation.navigate('Home');
     }
 
     const initialValues = {
