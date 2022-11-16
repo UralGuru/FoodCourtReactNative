@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, KeyboardAvoidingView, Pressable, TextInput, StyleSheet, Modal} from "react-native";
-import {Input} from '@rneui/base';
 import {Button} from "../../components/inputLabel/buttonAuth";
 import {useNavigation} from "@react-navigation/native";
 import {Formik, Field, Form, ErrorMessage, FormikProps} from "formik";
@@ -8,9 +7,8 @@ import * as Yup from "yup";
 import {COLORS, SIZES} from "../../constants/themes";
 import {ICONS} from "../../constants/icons";
 import {Ionicons} from '@expo/vector-icons';
-import {AntDesign} from '@expo/vector-icons';
-import CustomInput from "../../components/inputLabel/inputAuth";
 import AuthService from "../../api/auth.service"
+import {loginType} from "../../constants/types";
 
 
 const LoginScreen: React.FC<{}> = () => {
@@ -29,7 +27,7 @@ const LoginScreen: React.FC<{}> = () => {
         });
     };
 
-    const handleLogin = (formValue: Values) => {
+    const handleLogin = (formValue: loginType) => {
         // console.log(formValue);
         AuthService.login(formValue);
     }
@@ -39,13 +37,7 @@ const LoginScreen: React.FC<{}> = () => {
         password: "",
     };
 
-    interface Values {
-        email: string;
-        password: string;
-    }
 
-
-    // @ts-ignore
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.black}}>
             <KeyboardAvoidingView>
@@ -76,7 +68,6 @@ const LoginScreen: React.FC<{}> = () => {
                                 <View style={styles.labelInput}>
                                     <Text style={styles.textLabel}>Логин</Text>
                                     <TextInput
-                                        name="email"
                                         style={styles.textInput}
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
@@ -94,7 +85,6 @@ const LoginScreen: React.FC<{}> = () => {
                                     <Text style={styles.textLabel}>Пароль</Text>
                                     <View style={{display: 'flex', flexDirection: 'row'}}>
                                         <TextInput
-                                            name="password"
                                             style={[styles.textInput, {width: SIZES.width - 80}]}
                                             onChangeText={handleChange('password')}
                                             onBlur={handleBlur('password')}

@@ -22,14 +22,12 @@ import {AntDesign} from '@expo/vector-icons';
 import CustomInput from "../../components/inputLabel/inputAuth";
 import TextInputMask from 'react-native-text-input-mask';
 import AuthService from "../../api/auth.service"
+import {registerType} from "../../constants/types";
 
 
 const RegisterScreen: React.FC<{}> = () => {
     const [passView, SetPassView] = useState(true);
     const navigation = useNavigation();
-
-    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-    const mask = '+7 ([000]) [000]-[0000]';
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -47,7 +45,7 @@ const RegisterScreen: React.FC<{}> = () => {
         });
     };
 
-    const handleLogin = (formValue: Values) => {
+    const handleLogin = (formValue: registerType) => {
         // console.log(formValue);
         AuthService.register(formValue);
         // navigation.navigate('Home');
@@ -60,15 +58,7 @@ const RegisterScreen: React.FC<{}> = () => {
         password: "",
     };
 
-    interface Values {
-        name: string,
-        phone: string,
-        email: string;
-        password: string;
-    }
 
-
-    // @ts-ignore
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.black}}>
             <KeyboardAvoidingView>
@@ -116,12 +106,10 @@ const RegisterScreen: React.FC<{}> = () => {
                                 <View style={styles.labelInput}>
                                     <Text style={styles.textLabel}>Имя</Text>
                                     <TextInput
-                                        name="name"
                                         style={styles.textInput}
                                         onChangeText={handleChange('name')}
                                         onBlur={handleBlur('name')}
                                         value={values.name}
-                                        keyboardType="text"
                                     />
                                     {(errors.name && touched.name) &&
                                         <View>
@@ -133,12 +121,10 @@ const RegisterScreen: React.FC<{}> = () => {
                                 <View style={styles.labelInput}>
                                     <Text style={styles.textLabel}>Телефон</Text>
                                     <TextInput
-                                        name="phone"
                                         style={styles.textInput}
                                         onChangeText={handleChange('phone')}
                                         onBlur={handleBlur('phone')}
                                         value={values.phone}
-                                        keyboardType="phone"
                                     />
                                     {(errors.phone && touched.phone) &&
                                         <View>
@@ -150,7 +136,6 @@ const RegisterScreen: React.FC<{}> = () => {
                                 <View style={styles.labelInput}>
                                     <Text style={styles.textLabel}>Почта</Text>
                                     <TextInput
-                                        name="email"
                                         style={styles.textInput}
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
@@ -168,7 +153,6 @@ const RegisterScreen: React.FC<{}> = () => {
                                     <Text style={styles.textLabel}>Пароль</Text>
                                     <View style={{display: 'flex', flexDirection: 'row'}}>
                                         <TextInput
-                                            name="password"
                                             style={[styles.textInput, {width: SIZES.width - 80}]}
                                             onChangeText={handleChange('password')}
                                             onBlur={handleBlur('password')}
