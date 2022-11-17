@@ -2,9 +2,9 @@ import React from 'react';
 import {View, Text} from "react-native";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from "./screens/AuthScreens/LoginScreen";
-import RegisterScreen from "./screens/AuthScreens/RegisterScreen";
-import HomeScreen from "./screens/HomeScreen"
+import LoginScreen from "./AuthScreens/LoginScreen";
+import RegisterScreen from "./AuthScreens/RegisterScreen";
+import HomeScreen from "./HomeScreen"
 
 
 const StackNavigator: React.FC = () => {
@@ -22,3 +22,9 @@ const StackNavigator: React.FC = () => {
 };
 
 export default StackNavigator;
+
+export type RootStackParamList = {
+    Login: undefined;
+    Register: undefined;
+    Home: undefined
+};

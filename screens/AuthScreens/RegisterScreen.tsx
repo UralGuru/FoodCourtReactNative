@@ -13,6 +13,7 @@ import {
 import {Input} from '@rneui/base';
 import {Button} from "../../components/inputLabel/buttonAuth";
 import {useNavigation} from "@react-navigation/native";
+import {StackNavigationProp} from '@react-navigation/stack';
 import {Formik, Field, Form, ErrorMessage, FormikProps} from "formik";
 import * as Yup from "yup";
 import {COLORS, SIZES} from "../../constants/themes";
@@ -23,11 +24,14 @@ import CustomInput from "../../components/inputLabel/inputAuth";
 import TextInputMask from 'react-native-text-input-mask';
 import AuthService from "../../api/auth.service"
 import {registerType} from "../../constants/types";
+import {RootStackParamList} from "../StackNavigator";
 
+
+type authScreenProp = StackNavigationProp<RootStackParamList>;
 
 const RegisterScreen: React.FC<{}> = () => {
     const [passView, SetPassView] = useState(true);
-    const navigation = useNavigation();
+    const navigation = useNavigation<authScreenProp>();
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -202,8 +206,8 @@ const RegisterScreen: React.FC<{}> = () => {
                             title="Google"/>
 
                 </View>
-                <View style={styles.circle1}/>
-                <View style={styles.circle2}/>
+                {/*<View style={styles.circle1}/>*/}
+                {/*<View style={styles.circle2}/>*/}
 
             </KeyboardAvoidingView>
 

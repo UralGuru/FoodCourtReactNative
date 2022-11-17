@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Text, View, SafeAreaView, KeyboardAvoidingView, Pressable, TextInput, StyleSheet, Modal} from "react-native";
 import {Button} from "../../components/inputLabel/buttonAuth";
 import {useNavigation} from "@react-navigation/native";
+import {StackNavigationProp} from '@react-navigation/stack';
+
 import {Formik, Field, Form, ErrorMessage, FormikProps} from "formik";
 import * as Yup from "yup";
 import {COLORS, SIZES} from "../../constants/themes";
@@ -9,11 +11,14 @@ import {ICONS} from "../../constants/icons";
 import {Ionicons} from '@expo/vector-icons';
 import AuthService from "../../api/auth.service"
 import {loginType} from "../../constants/types";
+import {RootStackParamList} from "../StackNavigator";
+
+type authScreenProp = StackNavigationProp<RootStackParamList>;
 
 
 const LoginScreen: React.FC<{}> = () => {
     const [passView, SetPassView] = useState(true);
-    const navigation = useNavigation();
+    const navigation = useNavigation<authScreenProp>();
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -28,7 +33,6 @@ const LoginScreen: React.FC<{}> = () => {
     };
 
     const handleLogin = (formValue: loginType) => {
-        // console.log(formValue);
         AuthService.login(formValue);
     }
 
@@ -38,12 +42,10 @@ const LoginScreen: React.FC<{}> = () => {
     };
 
 
+
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.black}}>
             <KeyboardAvoidingView>
-                {/*<Pressable onPress={() => navigation.navigate('Register')}>*/}
-                {/*    <AntDesign name="arrowleft" size={24} color={COLORS.white}/>*/}
-                {/*</Pressable>*/}
                 <Text style={{textAlign: 'center', justifyContent: 'space-between', color: 'white', marginTop: 15}}>
                     ВХОД
                 </Text>
@@ -56,13 +58,9 @@ const LoginScreen: React.FC<{}> = () => {
                         validationSchema={validationSchema()}
                     >
                         {({
-                              handleChange,
-                              handleBlur,
-                              handleSubmit,
-                              values,
-                              errors,
-                              touched,
-                              resetForm
+                              handleChange, handleBlur,
+                              handleSubmit, values,
+                              errors, touched, resetForm
                           }) => (
                             <>
                                 <View style={styles.labelInput}>
@@ -133,14 +131,15 @@ const LoginScreen: React.FC<{}> = () => {
                             iconName={ICONS.google}
                             title="Google"/>
 
-                    <Pressable onPress={() => navigation.navigate('Register')}>
+                    <Pressable onPress={()=>navigation.navigate('Register')}>
                         <Text style={styles.text}>
-                            Все еще нет аккаунта? Создайте его <Text style={{textDecorationLine: 'underline'}}>здесь</Text>
+                            Все еще нет аккаунта? Создайте его <Text
+                            style={{textDecorationLine: 'underline'}}>здесь</Text>
                         </Text>
                     </Pressable>
                 </View>
-                <View style={styles.circle1}/>
-                <View style={styles.circle2}/>
+                {/*<View style={styles.circle1}/>*/}
+                {/*<View style={styles.circle2}/>*/}
 
             </KeyboardAvoidingView>
 
@@ -202,8 +201,8 @@ const styles = StyleSheet.create({
         width: 400,
         height: 400,
         position: 'absolute',
-        top: SIZES.height-400,
-        left: SIZES.width-230,
+        top: SIZES.height - 400,
+        left: SIZES.width - 230,
         backgroundColor: 'rgba(157, 157, 157, 0.04)',
         borderRadius: 1000,
         zIndex: -1,
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
         width: 400,
         height: 400,
         position: 'absolute',
-        top: SIZES.height-300,
+        top: SIZES.height - 300,
         left: -150,
         backgroundColor: 'rgba(157, 157, 157, 0.03)',
         borderRadius: 1000,
