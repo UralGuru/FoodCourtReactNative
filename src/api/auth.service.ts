@@ -10,8 +10,8 @@ const register = ({name, phone, email, password}:registerType) => {
         .then((res)=>console.log(res.data));
 };
 
-const login = ({email, password}: loginType) => {
-    console.log(email, password)
+const loginApi = ({email, password}: loginType) => {
+    console.log('auth.service', email, password)
     return axios
         .post(API_URL + "auth/login", {email, password})
         // .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
@@ -19,6 +19,7 @@ const login = ({email, password}: loginType) => {
             if (response.data.isSuccess) {
                 // localStorage.setItem("user", JSON.stringify(response.data));
                 console.log(response.data)
+
             }
             return response.data;
         }).catch(e=>console.log(e));
@@ -39,7 +40,7 @@ const getCurrentUser = () => {
 
 const AuthService = {
     register,
-    login,
+    loginApi,
     logout,
     getCurrentUser,
 }
