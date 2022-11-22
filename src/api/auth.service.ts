@@ -11,7 +11,7 @@ const register = ({name, phone, email, password}:registerType) => {
 };
 
 const loginApi = ({email, password}: loginType) => {
-    console.log(email, password)
+    console.log('auth.service', email, password)
     return axios
         .post(API_URL + "auth/login", {email, password})
         // .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
