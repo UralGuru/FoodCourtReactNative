@@ -1,23 +1,37 @@
 import { SafeAreaView, StatusBar } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import {createSharedElementStackNavigator} from "react-navigation-shared-element";
 import TodoHeader from "./src/componentsTodo/TodoHeader";
 import TodoList from "./src/componentsTodo/TodoList";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+import LoginScreen from "./src/screens/AuthScreens/LoginScreen";
+
+const Stack = createSharedElementStackNavigator()
+
+const AuthStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name={"Login"} component={LoginScreen} />
+        </Stack.Navigator>
+    )
+}
+
+const RootNavigation = () => {
+    return (
+        <NavigationContainer>
+            <StatusBar />
+            {/*<TodoHeader />*/}
+            {/*<TodoList />*/}
+            <AuthStack />
+        </NavigationContainer>
+    );
+}
 
 export default function App() {
-    const RootApp = () => {
-        return (
-            <SafeAreaView>
-                <StatusBar />
-                <TodoHeader />
-                <TodoList />
-            </SafeAreaView>
-        );
-    };
-
     return (
         <Provider store={store}>
-            <RootApp />
+            <RootNavigation />
         </Provider>
     );
 }

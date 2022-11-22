@@ -12,13 +12,19 @@ import {Ionicons} from '@expo/vector-icons';
 import AuthService from "../../api/auth.service"
 import {loginType} from "../../constants/types";
 import {RootStackParamList} from "../StackNavigator";
+import {useDispatch} from "react-redux";
+import {login} from "../../../redux/slices/userSlice";
+
 
 // type authScreenProp = StackNavigationProp<RootStackParamList>;
 
 
 const LoginScreen: React.FC<{}> = () => {
+    const [loading, setLoading] = useState(false)
     const [passView, SetPassView] = useState(true);
     // const navigation = useNavigation<authScreenProp>();
+
+    const dispatch = useDispatch();
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -33,7 +39,8 @@ const LoginScreen: React.FC<{}> = () => {
     };
 
     const handleLogin = (formValue: loginType) => {
-        AuthService.login(formValue);
+        // @ts-ignore
+        AuthService.loginApi(formValue).then(data => dispatch(login(data)));
     }
 
     const initialValues = {
