@@ -13,15 +13,15 @@ const register = ({name, phone, email, password}:registerType) => {
 const login = ({email, password}: loginType) => {
     console.log(email, password)
     return axios
-        // .post(API_URL + "auth/login", {email, password})
-        .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
+        .post(API_URL + "auth/login", {email, password})
+        // .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
         .then((response) => {
             if (response.data.isSuccess) {
                 // localStorage.setItem("user", JSON.stringify(response.data));
                 console.log(response.data)
             }
             return response.data;
-        });
+        }).catch(e=>console.log(e));
 };
 
 const logout = () => {
