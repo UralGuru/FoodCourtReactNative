@@ -17,7 +17,7 @@ const login = ({email, password}: loginType) => {
         .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
         .then((response) => {
             if (response.data.isSuccess) {
-                // localStorage.setItem("user", JSON.stringify(response.data));
+                // localStorage.sgit checkout merge release/0.1.0etItem("user", JSON.stringify(response.data));
                 console.log(response.data)
             }
             return response.data;
