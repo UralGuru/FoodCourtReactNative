@@ -2,11 +2,13 @@ import {createAsyncThunk, createSlice, current} from '@reduxjs/toolkit'
 import AuthService from "../../src/api/auth.service";
 
 const initialState = {
-    loading: false,
-    userInfo: {},
-    userToken: null,
-    error: null,
-    success: false,
+    isLoggedIn: false,
+    acssessToken: null,
+    errors: null,
+    expireDate: null,
+    isSuccess: false,
+    message: null,
+    refreshToken: null,
 }
 
 export const login = createAsyncThunk(
@@ -16,6 +18,7 @@ export const login = createAsyncThunk(
         try {
             const data = await AuthService.loginApi({email, password});
             // thunkAPI.dispatch(setMessage(response.data.message));
+
             return {user: data};
         } catch (error) {
             console.log('error userSlice')
