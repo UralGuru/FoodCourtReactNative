@@ -11,14 +11,14 @@ const register = ({name, phone, email, password}:registerType) => {
 };
 
 const loginApi = ({email, password}: loginType) => {
-    console.log('auth.service', email, password)
+    // console.log('auth.service', email, password)
     return axios
         .post(API_URL + "auth/login", {email, password})
         // .post(API_URL + "/auth/account/external-login?provider=Google&backUrl=/home", {email, password})
         .then((response) => {
             if (response.data.isSuccess) {
                 // localStorage.setItem("user", JSON.stringify(response.data));
-                console.log(response.data)
+                // console.log(response.data)
 
             }
             return response.data;
@@ -31,6 +31,13 @@ const logout = () => {
     //     return response.data;
     // });
     console.log("logout")
+    return {
+        loading: false,
+        userInfo: {},
+        userToken: null,
+        error: null,
+        success: false,
+    }
 };
 
 const getCurrentUser = () => {
