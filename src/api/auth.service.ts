@@ -22,7 +22,7 @@ const loginApi = ({email, password}: loginType) => {
 
             }
             return response.data;
-        }).catch(e=>console.log(e));
+        });
 };
 
 const logout = () => {

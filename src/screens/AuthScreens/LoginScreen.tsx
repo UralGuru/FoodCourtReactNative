@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, SafeAreaView, KeyboardAvoidingView, Pressable, TextInput, StyleSheet, Modal} from "react-native";
 import {Button} from "../../components/inputLabel/buttonAuth";
 import {useNavigation} from "@react-navigation/native";
@@ -11,8 +11,9 @@ import {Ionicons} from '@expo/vector-icons';
 // import AuthService from "../../api/auth.service"
 import {loginType} from "../../constants/types";
 import {RootStackParamList} from "../StackNavigator";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../../redux/slices/userSlice";
+import {clearMessage} from "../../../redux/slices/messageSlice";
 
 type authScreenProp = StackNavigationProp<RootStackParamList>;
 
@@ -20,9 +21,17 @@ type authScreenProp = StackNavigationProp<RootStackParamList>;
 const LoginScreen: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false)
     const [passView, SetPassView] = useState(true);
+
+    // @ts-ignore
+    const {message} = useSelector(state => state.message)
+    const dispatch = useDispatch();
+
     const navigation = useNavigation<authScreenProp>();
 
-    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(clearMessage());
+    }, [dispatch])
+
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -127,6 +136,11 @@ const LoginScreen: React.FC<{}> = () => {
                             </>
                         )}
                     </Formik>
+
+
+                        {message && (
+                            <View><Text style={{color: 'red'}}>{message}</Text></View>
+                        )}
 
                     <View>
                         <View style={styles.line}/>

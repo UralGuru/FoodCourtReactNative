@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice, current} from '@reduxjs/toolkit'
 import AuthService from "../../src/api/auth.service";
+import {setMessage} from "./messageSlice";
 
 const initialState = {
     isLoggedIn: false,
@@ -17,19 +18,18 @@ export const login = createAsyncThunk(
 
         try {
             const data = await AuthService.loginApi({email, password});
-            // thunkAPI.dispatch(setMessage(response.data.message));
+            console.log(data.message)
 
             return {user: data};
         } catch (error) {
-            console.log('error userSlice')
-            // const message =
-            //     (error.response &&
-            //         error.response.data &&
-            //         error.response.data.message) ||
-            //     error.message ||
-            //     error.toString();
-            // thunkAPI.dispatch(setMessage(message));
-            // return thunkAPI.rejectWithValue();
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
         }
     }
 );
@@ -37,9 +37,7 @@ export const login = createAsyncThunk(
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers:  (builder) => {
         builder
             .addMatcher(
@@ -53,9 +51,20 @@ const userSlice = createSlice({
                 state.message = action.payload.user.message;
                 state.refreshToken = action.payload.user.refreshToken;
                 console.log('--success--')
-                console.log(current(state))
-            }
-        )},
+                console.log(current(state))})
+            .addMatcher(
+                action => action.type.endsWith('/rejected'),
+                (state,)=>{
+                    state.isLoggedIn = false;
+                    state.acssessToken = null;
+                    state.errors = null;
+                    state.expireDate = null;
+                    state.isSuccess = false;
+                    state.message = null;
+                    state.refreshToken = null;
+                }
+            )
+    },
 })
 
 export default userSlice.reducer
