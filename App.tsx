@@ -6,6 +6,7 @@ import {AuthStack} from "./src/screens/StackNavigator";
 import HomeScreen from "./src/screens/HomeScreen";
 
 const RootNavigation = () => {
+    // @ts-ignore
     const isLoggedIn = useSelector(state => state.user.isLoggedIn)
 
     return (

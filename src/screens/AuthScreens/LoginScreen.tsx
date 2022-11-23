@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, KeyboardAvoidingView, Pressable, TextInput, StyleSheet, Modal} from "react-native";
 import {Button} from "../../components/inputLabel/buttonAuth";
-// import {useNavigation} from "@react-navigation/native";
-// import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from "@react-navigation/native";
+import {StackNavigationProp} from '@react-navigation/stack';
 import {Formik, Field, Form, ErrorMessage, FormikProps} from "formik";
 import * as Yup from "yup";
 import {COLORS, SIZES} from "../../constants/themes";
@@ -14,13 +14,13 @@ import {RootStackParamList} from "../StackNavigator";
 import {useDispatch} from "react-redux";
 import {login} from "../../../redux/slices/userSlice";
 
-// type authScreenProp = StackNavigationProp<RootStackParamList>;
+type authScreenProp = StackNavigationProp<RootStackParamList>;
 
 
 const LoginScreen: React.FC<{}> = () => {
     const [loading, setLoading] = useState(false)
     const [passView, SetPassView] = useState(true);
-    // const navigation = useNavigation<authScreenProp>();
+    const navigation = useNavigation<authScreenProp>();
 
     const dispatch = useDispatch();
 
@@ -138,12 +138,12 @@ const LoginScreen: React.FC<{}> = () => {
                             iconName={ICONS.google}
                             title="Google"/>
 
-                    {/*<Pressable onPress={()=>navigation.navigate('Register')}>*/}
+                    <Pressable onPress={()=>navigation.navigate('Register')}>
                         <Text style={styles.text}>
                             Все еще нет аккаунта? Создайте его <Text
                             style={{textDecorationLine: 'underline'}}>здесь</Text>
                         </Text>
-                    {/*</Pressable>*/}
+                    </Pressable>
                 </View>
                 {/*<View style={styles.circle1}/>*/}
                 {/*<View style={styles.circle2}/>*/}
